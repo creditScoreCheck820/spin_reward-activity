@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lucky Spin</title>
+  <style>
+    :root { color-scheme: light; --navy:#17365c; --green:#17a876; --muted:#64758a; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--navy); background:radial-gradient(circle at 92% 5%,#bdeed8 0,transparent 32%),linear-gradient(180deg,#e9f9f1 0,#f5fafc 49%,#fff 100%); }
+    main { max-width:480px; margin:auto; min-height:100vh; padding:calc(env(safe-area-inset-top) + 24px) 22px calc(env(safe-area-inset-bottom) + 38px); }
+    .activity-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .close-button { width:40px; min-height:40px; flex:none; border-radius:50%; background:#fff; color:var(--navy); box-shadow:0 4px 14px #17365c18; font-size:27px; font-weight:400; line-height:1; }
+    .eyebrow { margin:0; padding:9px 12px; border:1px solid #bdebd8; border-radius:999px; background:#ffffffb8; color:var(--green); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .hero { position:relative; padding:23px 0 4px; }
+    .hero::after { content:"✦"; position:absolute; top:10px; right:23px; color:#f1bd5e; font-size:30px; transform:rotate(18deg); }
+    h1 { margin:0; font-size:34px; letter-spacing:-.04em; }
+    .intro { max-width:340px; margin:9px 0 20px; color:var(--muted); font-size:14px; line-height:1.5; }
+    .stat { display:flex; align-items:center; gap:13px; padding:16px 18px; background:linear-gradient(120deg,#fff 65%,#e9f9f0); border:1px solid #dfeee8; border-radius:19px; box-shadow:0 8px 22px #17365c0b; }
+    .coin { width:43px; height:43px; flex:none; display:grid; place-items:center; border-radius:50%; background:#e2f7ec; color:var(--green); font-size:23px; font-weight:800; }
+    .stat-copy { flex:1; }
+    .stat span { display:block; color:var(--muted); font-size:12px; font-weight:600; }
+    .stat strong { display:block; margin-top:2px; font-size:27px; letter-spacing:-.04em; }
+    .stat .unit { color:var(--green); font-size:11px; font-weight:750; letter-spacing:.08em; text-transform:uppercase; }
+    .wheel-card { margin-top:18px; padding:21px 12px 24px; border-radius:25px; background:radial-gradient(circle at 50% 33%,#f2fff8 0,#fff 58%); border:1px solid #e3eef0; box-shadow:0 12px 32px #17365c0d; text-align:center; overflow:hidden; }
+    .status { display:inline-flex; align-items:center; gap:7px; margin-bottom:12px; padding:7px 11px; border-radius:999px; background:#e9f8ef; color:#13885f; font-size:11px; font-weight:750; }
+    .status::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+    .status.claimed { background:#edf1f5; color:#66798a; }
+    .wheel-card h2 { margin:0 0 5px; font-size:20px; }
+    .wheel-card p { margin:0; color:var(--muted); font-size:12px; }
+    .wheel-wrap { position:relative; width:min(78vw,310px); height:min(78vw,310px); margin:25px auto 19px; }
+    .wheel-wrap::before { content:""; position:absolute; inset:-14px; border:1px dashed #b5dccb; border-radius:50%; }
+    .pointer { position:absolute; z-index:4; left:50%; top:-8px; transform:translateX(-50%); width:0; height:0; border-left:15px solid transparent; border-right:15px solid transparent; border-top:28px solid var(--navy); filter:drop-shadow(0 3px 2px #17365c36); }
+    .wheel { position:absolute; inset:0; border:9px solid #fff; border-radius:50%; box-shadow:0 0 0 6px var(--green),0 12px 28px #125b5930; background:conic-gradient(from -30deg,#d9f5e9 0deg 60deg,#dceef9 60deg 120deg,#fcebbf 120deg 180deg,#def5ed 180deg 240deg,#e9e5fb 240deg 300deg,#ffe5d8 300deg 360deg); transition:transform 4s cubic-bezier(.13,.72,.13,1); }
+    .wheel-label { position:absolute; top:50%; left:50%; color:var(--navy); font-size:20px; font-weight:850; white-space:nowrap; }
+    .wheel-label small { display:block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.6; }
+    .hub { position:absolute; z-index:2; top:50%; left:50%; transform:translate(-50%,-50%); width:72px; height:72px; border:6px solid #fff; border-radius:50%; display:grid; place-items:center; background:var(--navy); color:#fff; font-size:12px; font-weight:850; letter-spacing:.08em; box-shadow:0 4px 15px #17365c47; }
+    button { width:min(100%,310px); min-height:50px; border:0; border-radius:15px; background:var(--green); color:#fff; font:700 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; box-shadow:0 8px 19px #17a8763b; }
+    button:disabled { background:#afc7c0; box-shadow:none; }
+    button:focus-visible { outline:3px solid var(--navy); outline-offset:3px; }
+    #message { min-height:40px; margin:15px 14px 0; font-size:14px; font-weight:650; line-height:1.45; }
+    .prizes { margin-top:18px; padding:17px; background:#fff; border:1px solid #e3eef0; border-radius:19px; box-shadow:0 8px 22px #17365c0b; }
+    .prizes h2 { margin:0 0 12px; font-size:14px; }
+    .prize-list { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .prize { padding:9px 4px; border-radius:10px; background:#f1faf6; color:#168d67; text-align:center; font-size:13px; font-weight:800; }
+    .prize small { font-size:10px; font-weight:650; }
+    .uses { margin-top:18px; padding:17px; background:#fff; border:1px solid #e3eef0; border-radius:19px; box-shadow:0 8px 22px #17365c0b; }
+    .uses h2 { margin:0 0 12px; font-size:14px; }
+    .use-row { display:flex; align-items:center; gap:11px; padding:11px 0; }
+    .use-row + .use-row { border-top:1px solid #edf2f4; }
+    .use-icon { width:35px; height:35px; flex:none; display:grid; place-items:center; border-radius:10px; background:#eaf7f1; color:var(--green); font-size:17px; }
+    .use-copy { flex:1; min-width:0; }
+    .use-copy strong { display:block; font-size:12px; }
+    .use-copy small { display:block; margin-top:3px; color:var(--muted); font-size:10px; line-height:1.4; }
+    .use-cost { flex:none; color:var(--green); font-size:11px; font-weight:800; }
+    .note { margin:20px 4px 0; color:var(--muted); font-size:12px; line-height:1.5; text-align:center; }
+    @media (prefers-reduced-motion:reduce) { .wheel { transition-duration:.01s; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="activity-header">
+      <div class="eyebrow">Reward event</div>
+      <button class="close-button" id="closeButton" type="button" aria-label="Close activity">&times;</button>
+    </div>
+    <div class="hero">
+      <h1>Lucky Spin</h1>
+      <p class="intro">Spin while this reward event is available and collect bonus points for in-app unlocks.</p>
+    </div>
+    <section class="stat" aria-label="Your rewards">
+      <div class="coin" aria-hidden="true">★</div>
+      <div class="stat-copy"><span>Points balance</span><strong id="balance">—</strong></div>
+      <span class="unit">Your rewards</span>
+    </section>
+    <section class="wheel-card">
+      <div class="status" id="spinStatus" role="status">Checking spin availability…</div>
+      <h2>Activity wheel</h2>
+      <p>Spin the wheel to reveal your bonus reward.</p>
+      <div class="wheel-wrap" role="img" aria-label="Prize wheel with 5, 10, 15, 20, 30 and 50 point rewards">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel"></div>
+        <div class="hub">POINTS</div>
+      </div>
+      <button id="spinButton" disabled>Loading…</button>
+      <div id="message" role="status" aria-live="polite"></div>
+    </section>
+    <section class="prizes" aria-label="Possible rewards">
+      <h2>Possible rewards</h2>
+      <div class="prize-list">
+        <div class="prize">+5 <small>pts</small></div><div class="prize">+10 <small>pts</small></div><div class="prize">+15 <small>pts</small></div>
+        <div class="prize">+20 <small>pts</small></div><div class="prize">+30 <small>pts</small></div><div class="prize">+50 <small>pts</small></div>
+      </div>
+    </section>
+    <section class="uses" aria-label="Ways to use points">
+      <h2>Use your points</h2>
+      <div class="use-row">
+        <div class="use-icon" aria-hidden="true">▦</div>
+        <div class="use-copy"><strong>Monthly payoff details</strong><small>Tools → Debt Payoff Planner</small></div>
+        <div class="use-cost">10 pts</div>
+      </div>
+      <div class="use-row">
+        <div class="use-icon" aria-hidden="true">⇄</div>
+        <div class="use-copy"><strong>Scenario comparison report</strong><small>Profile → Saved Scenarios</small></div>
+        <div class="use-cost">10 pts</div>
+      </div>
+    </section>
+    <p class="note">Points are an in-app activity reward. They have no cash value and do not affect your credit estimate.</p>
+  </main>
+  <script>
+    const rewards = [5, 10, 15, 20, 30, 50];
+    const wheel = document.getElementById('wheel');
+    const button = document.getElementById('spinButton');
+    const closeButton = document.getElementById('closeButton');
+    const message = document.getElementById('message');
+    const spinStatus = document.getElementById('spinStatus');
+    let state = null;
+    let rotation = 0;
+    let busy = false;
+
+    rewards.forEach((points, index) => {
+      const label = document.createElement('div');
+      label.className = 'wheel-label';
+      label.style.transform = `translate(-50%, -50%) rotate(${index * 60}deg) translateY(-100px) rotate(${-index * 60}deg)`;
+      label.innerHTML = `+${points}<small>points</small>`;
+      wheel.appendChild(label);
+    });
+
+    function callNative(key) {
+      if (!window.Android || typeof window.Android.callAndroid !== 'function') {
+        message.textContent = 'Open this page in the app to spin.';
+        button.textContent = 'Unavailable';
+        return;
+      }
+      window.Android.callAndroid(JSON.stringify({ key }));
+    }
+
+    function render(data) {
+      state = data;
+      document.getElementById('balance').textContent = data.balance ?? 0;
+      spinStatus.textContent = data.claimedToday ? 'Spin already used' : 'Spin available';
+      spinStatus.classList.toggle('claimed', !!data.claimedToday);
+      button.disabled = busy || data.claimedToday;
+      button.textContent = data.claimedToday ? 'Spin unavailable' : 'Spin for bonus points';
+      if (data.claimedToday && !busy && !message.textContent) message.textContent = 'You have already used your available spin.';
+    }
+
+    function finishSpin(data) {
+      busy = false;
+      render(data);
+      message.textContent = `You earned ${data.points} points!`;
+    }
+
+    window.callJs = function(payload) {
+      try {
+        const reply = typeof payload === 'string' ? JSON.parse(payload) : payload;
+        if (reply.key !== 20 && reply.key !== 21) return;
+        const data = JSON.parse(reply.value || '{}');
+        if (reply.key === 20) {
+          render(data);
+          return;
+        }
+        if (data.segmentIndex == null || data.points == null) {
+          busy = false;
+          render(data);
+          message.textContent = 'You have already used your available spin.';
+          return;
+        }
+        const target = (360 - data.segmentIndex * 60) % 360;
+        const delta = 1800 + ((target - (rotation % 360) + 360) % 360);
+        rotation += delta;
+        wheel.style.transform = `rotate(${rotation}deg)`;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.setTimeout(() => finishSpin(data), reducedMotion ? 30 : 4100);
+      } catch (_) {
+        busy = false;
+        message.textContent = 'Could not update your reward. Please reopen this page.';
+        button.disabled = false;
+      }
+    };
+
+    button.addEventListener('click', () => {
+      if (!state || state.claimedToday || busy) return;
+      busy = true;
+      button.disabled = true;
+      button.textContent = 'Spinning…';
+      message.textContent = '';
+      callNative(21);
+    });
+    closeButton.addEventListener('click', () => callNative(22));
+    callNative(20);
+  </script>
+</body>
+</html>
