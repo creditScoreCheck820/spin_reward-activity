@@ -11,10 +11,8 @@
     body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--navy); }
     .overlay { width:100%; min-height:100%; min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:calc(env(safe-area-inset-top) + 18px) 20px calc(env(safe-area-inset-bottom) + 18px); background:transparent; }
     .card { width:min(100%,340px); max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px); overflow-y:auto; overscroll-behavior:contain; padding:20px 20px 22px; border:1px solid #def0e7; border-radius:28px; background:linear-gradient(155deg,#f0fff7 0,#fff 38%,#fff 100%); box-shadow:0 18px 48px #17365c36; text-align:center; -webkit-overflow-scrolling:touch; }
-    .top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .eyebrow { color:var(--green); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .top { display:flex; justify-content:flex-end; margin-bottom:-3px; }
     .close-button { width:34px; height:34px; flex:none; padding:0; border:0; border-radius:50%; background:#eaf4ef; color:var(--navy); font-size:25px; line-height:1; box-shadow:none; }
-    .badge { width:48px; height:48px; display:grid; place-items:center; margin:0 auto 9px; border-radius:16px; background:#dff7eb; color:var(--green); font-size:26px; }
     h1 { margin:0; font-size:26px; line-height:1.15; letter-spacing:-.035em; }
     .intro { margin:7px auto 15px; max-width:290px; color:var(--muted); font-size:12px; line-height:1.45; }
     .balance { display:inline-flex; align-items:baseline; gap:7px; padding:8px 14px; border-radius:999px; background:#eff8f3; font-size:12px; }
@@ -45,7 +43,7 @@
     .reward-info { margin-top:14px; padding-top:12px; border-top:1px solid #e9f0ec; color:var(--muted); font-size:11px; line-height:1.45; }
     .reward-info strong { color:var(--navy); }
     .note { margin:7px 0 0; color:#8593a1; font-size:10px; line-height:1.35; }
-    @media (max-height:670px) { .card { padding:14px 18px; } .badge { width:38px; height:38px; margin-bottom:5px; font-size:20px; } h1 { font-size:23px; } .intro { margin-bottom:9px; } .status { margin:10px auto; } .flip-scene { width:138px; height:148px; margin-bottom:10px; } .seal { width:58px; height:58px; } .seal svg { width:30px; height:30px; } }
+    @media (max-height:670px) { .card { padding:14px 18px; } h1 { font-size:23px; } .intro { margin-bottom:9px; } .status { margin:10px auto; } .flip-scene { width:138px; height:148px; margin-bottom:10px; } .seal { width:58px; height:58px; } .seal svg { width:30px; height:30px; } }
     @media (prefers-reduced-motion:reduce) { .flip-card { transition-duration:.01s; } }
   </style>
 </head>
@@ -53,10 +51,8 @@
   <div class="overlay">
     <main class="card" role="dialog" aria-modal="true" aria-labelledby="activityTitle">
       <div class="top">
-        <span class="eyebrow">Welcome reward</span>
         <button class="close-button" id="closeButton" type="button" aria-label="Close activity">&times;</button>
       </div>
-      <div class="badge" aria-hidden="true">★</div>
       <h1 id="activityTitle">Welcome Check-In</h1>
       <p class="intro">Reveal a bonus reward to use in your financial planning tools.</p>
       <div class="balance"><span>Points balance</span><strong id="balance">—</strong><small>pts</small></div>
