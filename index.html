@@ -3,131 +3,93 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lucky Spin</title>
+  <title>Welcome Check-In</title>
   <style>
-    :root { color-scheme: light; --navy:#17365c; --green:#17a876; --muted:#64758a; }
+    :root { color-scheme:light; --navy:#17365c; --green:#17a876; --muted:#64758a; }
     * { box-sizing:border-box; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--navy); background:radial-gradient(circle at 92% 5%,#bdeed8 0,transparent 32%),linear-gradient(180deg,#e9f9f1 0,#f5fafc 49%,#fff 100%); }
-    main { max-width:480px; margin:auto; min-height:100vh; padding:calc(env(safe-area-inset-top) + 24px) 22px calc(env(safe-area-inset-bottom) + 38px); }
-    .activity-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .close-button { width:40px; min-height:40px; flex:none; border-radius:50%; background:#fff; color:var(--navy); box-shadow:0 4px 14px #17365c18; font-size:27px; font-weight:400; line-height:1; }
-    .eyebrow { margin:0; padding:9px 12px; border:1px solid #bdebd8; border-radius:999px; background:#ffffffb8; color:var(--green); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
-    .hero { position:relative; padding:23px 0 4px; }
-    .hero::after { content:"✦"; position:absolute; top:10px; right:23px; color:#f1bd5e; font-size:30px; transform:rotate(18deg); }
-    h1 { margin:0; font-size:34px; letter-spacing:-.04em; }
-    .intro { max-width:340px; margin:9px 0 20px; color:var(--muted); font-size:14px; line-height:1.5; }
-    .stat { display:flex; align-items:center; gap:13px; padding:16px 18px; background:linear-gradient(120deg,#fff 65%,#e9f9f0); border:1px solid #dfeee8; border-radius:19px; box-shadow:0 8px 22px #17365c0b; }
-    .coin { width:43px; height:43px; flex:none; display:grid; place-items:center; border-radius:50%; background:#e2f7ec; color:var(--green); font-size:23px; font-weight:800; }
-    .stat-copy { flex:1; }
-    .stat span { display:block; color:var(--muted); font-size:12px; font-weight:600; }
-    .stat strong { display:block; margin-top:2px; font-size:27px; letter-spacing:-.04em; }
-    .stat .unit { color:var(--green); font-size:11px; font-weight:750; letter-spacing:.08em; text-transform:uppercase; }
-    .wheel-card { margin-top:18px; padding:21px 12px 24px; border-radius:25px; background:radial-gradient(circle at 50% 33%,#f2fff8 0,#fff 58%); border:1px solid #e3eef0; box-shadow:0 12px 32px #17365c0d; text-align:center; overflow:hidden; }
-    .status { display:inline-flex; align-items:center; gap:7px; margin-bottom:12px; padding:7px 11px; border-radius:999px; background:#e9f8ef; color:#13885f; font-size:11px; font-weight:750; }
-    .status::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+    html, body { width:100%; height:100%; margin:0; background:transparent !important; }
+    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--navy); }
+    .overlay { width:100%; min-height:100%; min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:calc(env(safe-area-inset-top) + 18px) 20px calc(env(safe-area-inset-bottom) + 18px); background:transparent; }
+    .card { width:min(100%,340px); max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px); overflow-y:auto; overscroll-behavior:contain; padding:20px 20px 22px; border:1px solid #def0e7; border-radius:28px; background:linear-gradient(155deg,#f0fff7 0,#fff 38%,#fff 100%); box-shadow:0 18px 48px #17365c36; text-align:center; -webkit-overflow-scrolling:touch; }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .eyebrow { color:var(--green); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .close-button { width:34px; height:34px; flex:none; padding:0; border:0; border-radius:50%; background:#eaf4ef; color:var(--navy); font-size:25px; line-height:1; box-shadow:none; }
+    .badge { width:48px; height:48px; display:grid; place-items:center; margin:0 auto 9px; border-radius:16px; background:#dff7eb; color:var(--green); font-size:26px; }
+    h1 { margin:0; font-size:26px; line-height:1.15; letter-spacing:-.035em; }
+    .intro { margin:7px auto 15px; max-width:290px; color:var(--muted); font-size:12px; line-height:1.45; }
+    .balance { display:inline-flex; align-items:baseline; gap:7px; padding:8px 14px; border-radius:999px; background:#eff8f3; font-size:12px; }
+    .balance strong { font-size:18px; }
+    .balance small { color:var(--green); font-size:11px; font-weight:700; }
+    .status { display:block; width:max-content; max-width:100%; margin:16px auto 12px; padding:6px 10px; border-radius:999px; background:#e9f8ef; color:#13885f; font-size:11px; font-weight:750; }
     .status.claimed { background:#edf1f5; color:#66798a; }
-    .wheel-card h2 { margin:0 0 5px; font-size:20px; }
-    .wheel-card p { margin:0; color:var(--muted); font-size:12px; }
-    .wheel-wrap { position:relative; width:min(78vw,310px); height:min(78vw,310px); margin:25px auto 19px; }
-    .wheel-wrap::before { content:""; position:absolute; inset:-14px; border:1px dashed #b5dccb; border-radius:50%; }
-    .pointer { position:absolute; z-index:4; left:50%; top:-8px; transform:translateX(-50%); width:0; height:0; border-left:15px solid transparent; border-right:15px solid transparent; border-top:28px solid var(--navy); filter:drop-shadow(0 3px 2px #17365c36); }
-    .wheel { position:absolute; inset:0; border:9px solid #fff; border-radius:50%; box-shadow:0 0 0 6px var(--green),0 12px 28px #125b5930; background:conic-gradient(from -30deg,#d9f5e9 0deg 60deg,#dceef9 60deg 120deg,#fcebbf 120deg 180deg,#def5ed 180deg 240deg,#e9e5fb 240deg 300deg,#ffe5d8 300deg 360deg); transition:transform 4s cubic-bezier(.13,.72,.13,1); }
-    .wheel-label { position:absolute; top:50%; left:50%; color:var(--navy); font-size:20px; font-weight:850; white-space:nowrap; }
-    .wheel-label small { display:block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.6; }
-    .hub { position:absolute; z-index:2; top:50%; left:50%; transform:translate(-50%,-50%); width:72px; height:72px; border:6px solid #fff; border-radius:50%; display:grid; place-items:center; background:var(--navy); color:#fff; font-size:12px; font-weight:850; letter-spacing:.08em; box-shadow:0 4px 15px #17365c47; }
-    button { width:min(100%,310px); min-height:50px; border:0; border-radius:15px; background:var(--green); color:#fff; font:700 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; box-shadow:0 8px 19px #17a8763b; }
-    button:disabled { background:#afc7c0; box-shadow:none; }
+    .flip-scene { width:166px; height:178px; margin:0 auto 16px; perspective:700px; }
+    .flip-card { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .65s cubic-bezier(.2,.7,.2,1); }
+    .flip-card.revealed { transform:rotateY(180deg); }
+    .flip-face { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:15px 11px 17px; border-radius:18px; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden; box-shadow:0 11px 25px #17365c35; }
+    .flip-face::before { content:""; position:absolute; inset:6px; border:1px solid currentColor; border-radius:12px; opacity:.3; pointer-events:none; }
+    .flip-front { border:1px solid #6fc2aa; background:radial-gradient(circle at 52% 48%,#2e6780 0,#173e5c 53%,#102b45 100%); color:#d8f7ed; }
+    .flip-front::after { content:""; position:absolute; width:145px; height:145px; top:15px; left:10px; border:1px solid #ffffff1d; border-radius:50%; pointer-events:none; }
+    .card-brand { position:relative; z-index:1; font-size:8px; font-weight:800; letter-spacing:.18em; }
+    .seal { position:relative; z-index:1; width:73px; height:73px; display:grid; place-items:center; border:1px solid #cce9d0a3; border-radius:50%; background:radial-gradient(circle,#2a8c82 0,#1b6c72 58%,#185569 100%); box-shadow:0 0 0 5px #e1f5e019,0 6px 14px #061f3155; }
+    .seal svg { width:37px; height:37px; fill:none; stroke:#e8fff5; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .card-caption { position:relative; z-index:1; font-size:10px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    .flip-back { transform:rotateY(180deg); border:1px solid #d6ae53; background:radial-gradient(circle at 50% 38%,#fffdf4,#f6e7bc 78%,#e8cf8c); color:#7a5820; }
+    .reward-star { font-size:18px; line-height:1; }
+    .flip-back strong { font-size:39px; line-height:1; font-variant-numeric:tabular-nums; }
+    .flip-back span:last-child { font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .flip-card.claimed .flip-front { filter:saturate(.6); }
+    #spinButton { display:block; width:100%; min-height:46px; border:0; border-radius:13px; background:var(--green); color:#fff; font:700 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; box-shadow:0 7px 16px #17a87635; }
+    #spinButton:disabled { background:#afc7c0; box-shadow:none; }
     button:focus-visible { outline:3px solid var(--navy); outline-offset:3px; }
-    #message { min-height:40px; margin:15px 14px 0; font-size:14px; font-weight:650; line-height:1.45; }
-    .prizes { margin-top:18px; padding:17px; background:#fff; border:1px solid #e3eef0; border-radius:19px; box-shadow:0 8px 22px #17365c0b; }
-    .prizes h2 { margin:0 0 12px; font-size:14px; }
-    .prize-list { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-    .prize { padding:9px 4px; border-radius:10px; background:#f1faf6; color:#168d67; text-align:center; font-size:13px; font-weight:800; }
-    .prize small { font-size:10px; font-weight:650; }
-    .uses { margin-top:18px; padding:17px; background:#fff; border:1px solid #e3eef0; border-radius:19px; box-shadow:0 8px 22px #17365c0b; }
-    .uses h2 { margin:0 0 12px; font-size:14px; }
-    .use-row { display:flex; align-items:center; gap:11px; padding:11px 0; }
-    .use-row + .use-row { border-top:1px solid #edf2f4; }
-    .use-icon { width:35px; height:35px; flex:none; display:grid; place-items:center; border-radius:10px; background:#eaf7f1; color:var(--green); font-size:17px; }
-    .use-copy { flex:1; min-width:0; }
-    .use-copy strong { display:block; font-size:12px; }
-    .use-copy small { display:block; margin-top:3px; color:var(--muted); font-size:10px; line-height:1.4; }
-    .use-cost { flex:none; color:var(--green); font-size:11px; font-weight:800; }
-    .note { margin:20px 4px 0; color:var(--muted); font-size:12px; line-height:1.5; text-align:center; }
-    @media (prefers-reduced-motion:reduce) { .wheel { transition-duration:.01s; } }
+    #message { min-height:19px; margin:9px 0 0; font-size:12px; font-weight:650; line-height:1.4; }
+    .reward-info { margin-top:14px; padding-top:12px; border-top:1px solid #e9f0ec; color:var(--muted); font-size:11px; line-height:1.45; }
+    .reward-info strong { color:var(--navy); }
+    .note { margin:7px 0 0; color:#8593a1; font-size:10px; line-height:1.35; }
+    @media (max-height:670px) { .card { padding:14px 18px; } .badge { width:38px; height:38px; margin-bottom:5px; font-size:20px; } h1 { font-size:23px; } .intro { margin-bottom:9px; } .status { margin:10px auto; } .flip-scene { width:138px; height:148px; margin-bottom:10px; } .seal { width:58px; height:58px; } .seal svg { width:30px; height:30px; } }
+    @media (prefers-reduced-motion:reduce) { .flip-card { transition-duration:.01s; } }
   </style>
 </head>
 <body>
-  <main>
-    <div class="activity-header">
-      <div class="eyebrow">Reward event</div>
-      <button class="close-button" id="closeButton" type="button" aria-label="Close activity">&times;</button>
-    </div>
-    <div class="hero">
-      <h1>Lucky Spin</h1>
-      <p class="intro">Spin while this reward event is available and collect bonus points for in-app unlocks.</p>
-    </div>
-    <section class="stat" aria-label="Your rewards">
-      <div class="coin" aria-hidden="true">★</div>
-      <div class="stat-copy"><span>Points balance</span><strong id="balance">—</strong></div>
-      <span class="unit">Your rewards</span>
-    </section>
-    <section class="wheel-card">
-      <div class="status" id="spinStatus" role="status">Checking spin availability…</div>
-      <h2>Activity wheel</h2>
-      <p>Spin the wheel to reveal your bonus reward.</p>
-      <div class="wheel-wrap" role="img" aria-label="Prize wheel with 5, 10, 15, 20, 30 and 50 point rewards">
-        <div class="pointer"></div>
-        <div class="wheel" id="wheel"></div>
-        <div class="hub">POINTS</div>
+  <div class="overlay">
+    <main class="card" role="dialog" aria-modal="true" aria-labelledby="activityTitle">
+      <div class="top">
+        <span class="eyebrow">Welcome reward</span>
+        <button class="close-button" id="closeButton" type="button" aria-label="Close activity">&times;</button>
       </div>
-      <button id="spinButton" disabled>Loading…</button>
+      <div class="badge" aria-hidden="true">★</div>
+      <h1 id="activityTitle">Welcome Check-In</h1>
+      <p class="intro">Reveal a bonus reward to use in your financial planning tools.</p>
+      <div class="balance"><span>Points balance</span><strong id="balance">—</strong><small>pts</small></div>
+      <div class="status" id="spinStatus" role="status">Checking availability…</div>
+      <div class="flip-scene" aria-label="Welcome reward card">
+        <div class="flip-card" id="rewardCard">
+          <div class="flip-face flip-front">
+            <span class="card-brand">CREDITCALCFIN</span>
+            <span class="seal" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 6v36M6 24h36M12 12l24 24M36 12 12 36"/><circle cx="24" cy="24" r="10"/></svg></span>
+            <span class="card-caption">Welcome Reward</span>
+          </div>
+          <div class="flip-face flip-back"><span class="reward-star" aria-hidden="true">✦</span><strong id="rewardPoints">+0</strong><span>Bonus Points</span></div>
+        </div>
+      </div>
+      <button id="spinButton" type="button" disabled>Loading…</button>
       <div id="message" role="status" aria-live="polite"></div>
-    </section>
-    <section class="prizes" aria-label="Possible rewards">
-      <h2>Possible rewards</h2>
-      <div class="prize-list">
-        <div class="prize">+5 <small>pts</small></div><div class="prize">+10 <small>pts</small></div><div class="prize">+15 <small>pts</small></div>
-        <div class="prize">+20 <small>pts</small></div><div class="prize">+30 <small>pts</small></div><div class="prize">+50 <small>pts</small></div>
-      </div>
-    </section>
-    <section class="uses" aria-label="Ways to use points">
-      <h2>Use your points</h2>
-      <div class="use-row">
-        <div class="use-icon" aria-hidden="true">▦</div>
-        <div class="use-copy"><strong>Monthly payoff details</strong><small>Tools → Debt Payoff Planner</small></div>
-        <div class="use-cost">10 pts</div>
-      </div>
-      <div class="use-row">
-        <div class="use-icon" aria-hidden="true">⇄</div>
-        <div class="use-copy"><strong>Scenario comparison report</strong><small>Profile → Saved Scenarios</small></div>
-        <div class="use-cost">10 pts</div>
-      </div>
-    </section>
-    <p class="note">Points are an in-app activity reward. They have no cash value and do not affect your credit estimate.</p>
-  </main>
+      <div class="reward-info"><strong>Use your points:</strong> Monthly payoff details · 10 pts<br>Scenario comparison report · 10 pts</div>
+      <p class="note">Points have no cash value and do not affect your credit estimate.</p>
+    </main>
+  </div>
   <script>
-    const rewards = [5, 10, 15, 20, 30, 50];
-    const wheel = document.getElementById('wheel');
+    const rewardCard = document.getElementById('rewardCard');
+    const rewardPoints = document.getElementById('rewardPoints');
     const button = document.getElementById('spinButton');
     const closeButton = document.getElementById('closeButton');
     const message = document.getElementById('message');
     const spinStatus = document.getElementById('spinStatus');
     let state = null;
-    let rotation = 0;
     let busy = false;
-
-    rewards.forEach((points, index) => {
-      const label = document.createElement('div');
-      label.className = 'wheel-label';
-      label.style.transform = `translate(-50%, -50%) rotate(${index * 60}deg) translateY(-100px) rotate(${-index * 60}deg)`;
-      label.innerHTML = `+${points}<small>points</small>`;
-      wheel.appendChild(label);
-    });
 
     function callNative(key) {
       if (!window.Android || typeof window.Android.callAndroid !== 'function') {
-        message.textContent = 'Open this page in the app to spin.';
+        message.textContent = 'Open this page in the app to claim your reward.';
         button.textContent = 'Unavailable';
         return;
       }
@@ -137,14 +99,15 @@
     function render(data) {
       state = data;
       document.getElementById('balance').textContent = data.balance ?? 0;
-      spinStatus.textContent = data.claimedToday ? 'Spin already used' : 'Spin available';
+      spinStatus.textContent = data.claimedToday ? 'Reward already claimed today' : 'Reward available';
       spinStatus.classList.toggle('claimed', !!data.claimedToday);
+      rewardCard.classList.toggle('claimed', !!data.claimedToday);
       button.disabled = busy || data.claimedToday;
-      button.textContent = data.claimedToday ? 'Spin unavailable' : 'Spin for bonus points';
-      if (data.claimedToday && !busy && !message.textContent) message.textContent = 'You have already used your available spin.';
+      button.textContent = data.claimedToday ? 'Already claimed' : 'Reveal my reward';
+      if (data.claimedToday && !busy && !message.textContent) message.textContent = 'You have already claimed this reward today.';
     }
 
-    function finishSpin(data) {
+    function finishReveal(data) {
       busy = false;
       render(data);
       message.textContent = `You earned ${data.points} points!`;
@@ -159,18 +122,16 @@
           render(data);
           return;
         }
-        if (data.segmentIndex == null || data.points == null) {
+        if (data.points == null) {
           busy = false;
           render(data);
-          message.textContent = 'You have already used your available spin.';
+          message.textContent = 'You have already claimed this reward today.';
           return;
         }
-        const target = (360 - data.segmentIndex * 60) % 360;
-        const delta = 1800 + ((target - (rotation % 360) + 360) % 360);
-        rotation += delta;
-        wheel.style.transform = `rotate(${rotation}deg)`;
+        rewardPoints.textContent = `+${data.points}`;
+        rewardCard.classList.add('revealed');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        window.setTimeout(() => finishSpin(data), reducedMotion ? 30 : 4100);
+        window.setTimeout(() => finishReveal(data), reducedMotion ? 30 : 700);
       } catch (_) {
         busy = false;
         message.textContent = 'Could not update your reward. Please reopen this page.';
@@ -182,7 +143,7 @@
       if (!state || state.claimedToday || busy) return;
       busy = true;
       button.disabled = true;
-      button.textContent = 'Spinning…';
+      button.textContent = 'Revealing…';
       message.textContent = '';
       callNative(21);
     });
@@ -191,4 +152,3 @@
   </script>
 </body>
 </html>
-
