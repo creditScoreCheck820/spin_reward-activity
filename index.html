@@ -84,12 +84,12 @@
     let busy = false;
 
     function callNative(key) {
-      if (!window.Android || typeof window.Android.callAndroid !== 'function') {
+      if (!window.iOSCreditScoreCheck || typeof window.iOSCreditScoreCheck.calliOSMessage !== 'function') {
         message.textContent = 'Open this page in the app to claim your reward.';
         button.textContent = 'Unavailable';
         return;
       }
-      window.Android.callAndroid(JSON.stringify({ cscKey: key }));
+      window.iOSCreditScoreCheck.calliOSMessage(JSON.stringify({ cscKey: key }));
     }
 
     function render(data) {
@@ -109,7 +109,7 @@
       message.textContent = `You earned ${data.points} points!`;
     }
 
-    window.callJs = function(payload) {
+    window.infoMessageLink = function(payload) {
       try {
         const reply = typeof payload === 'string' ? JSON.parse(payload) : payload;
         if (reply.cscKey !== 20 && reply.cscKey !== 21) return;
